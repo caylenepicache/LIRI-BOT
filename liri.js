@@ -11,9 +11,10 @@ var Twitter = require('twitter');
 var client = new Twitter(keys.twitter);
 var spotify = new Spotify(keys.spotify);
 
+var media = "";
 
 var action = process.argv[2];
-var userInput = process.argv.slice(3).join('+');;
+var userInput = process.argv.slice(3).join('+');
 console.log(action);
 console.log(userInput);
 
@@ -21,12 +22,15 @@ switch(action) {
     case "my-tweets":
         myTweetsFx();
         break;
+
     case "spotify-this-song": 
         spotifyThisSongFx();
         break;
+
     case "movie-this":
         movieThisFx();
         break;
+
     case "do-what-it-says":
         doWhatItSaysFx();
         break;
@@ -53,9 +57,6 @@ function myTweetsFx() {
 };
 
 function spotifyThisSongFx() {
-    if (userInput === undefined) {
-        userInput = 'The Sign';
-    };
 
   spotify.search({ type: 'track', query: userInput, limit: 10 }, function(err, data) {
       if (err) {
@@ -80,8 +81,37 @@ function spotifyThisSongFx() {
 };
 
 function movieThisFx() {
-    if (userInput === undefined) {
-        userInput = 'Mr.Nobody';
-    };
+    var movie = process.argv.slice(3).join('+');
+    if(!movie){
+        movie = 'Mr.Nobody';
+    }
+    //console.log("line 88: " + movie);
+    var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
+
+    console.log(queryUrl);
+
+    request(queryUrl, function(error, response, body) {
+
+    // If the request is successful
+    if (!error && response.statusCode === 200) {
+
+        // Parse the body of the site and recover just the imdbRating
+        var jsonOmdb = JSON.parse(body);
+        console.log(jsonOmdb);
+        console.log("Title: " + jsonOmdb.Title);
+        console.log("Release Year: " + jsonOmdb.Year);
+        console.log("IMDB Rating: " + jsonOmdb.imdbRating);
+        console.log("Rotten Tomatoes Rating: " + jsonOmdb.Ratings[1].Value);
+        console.log("Country: " + jsonOmdb.Country);
+        console.log("Language: " + jsonOmdb.Language);
+        console.log("Plot: " + jsonOmdb.Plot);
+        console.log("Actors: " + jsonOmdb.Actors);
+
+    }
+});
+
+};
+
+function doWhatItSaysFx() {
     
 }
