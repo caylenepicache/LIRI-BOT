@@ -11,6 +11,7 @@ var Twitter = require('twitter');
 var client = new Twitter(keys.twitter);
 var spotify = new Spotify(keys.spotify);
 
+var textFileInput = [];
 var media = "";
 
 var action = process.argv[2];
@@ -37,7 +38,7 @@ switch(action) {
 }
 
 function myTweetsFx() {
-    var params = { screen_name: "LIRI_Bootcamp", count: 20 };
+    var params = { screen_name: "LIRI_Bootcamp", count: 10 };
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
         if (!error && response.StatusCode == 200) {
             console.log(data);
@@ -57,8 +58,16 @@ function myTweetsFx() {
 };
 
 function spotifyThisSongFx() {
+    var song = process.argv.slice(3).join('+');
+    if(!song && !media){
+        song = 'The Sign';
+    }
+    else if(!song){
+        song = media;
+        //console.log("in else if: " + song);
+    }
 
-  spotify.search({ type: 'track', query: userInput, limit: 10 }, function(err, data) {
+  spotify.search({ type: 'track', query: song, limit: 10 }, function(err, data) {
       if (err) {
         return console.log('Error occurred: ' + err);
       }
@@ -82,13 +91,17 @@ function spotifyThisSongFx() {
 
 function movieThisFx() {
     var movie = process.argv.slice(3).join('+');
-    if(!movie){
+    if(!movie && !media){
         movie = 'Mr.Nobody';
+    }
+    else if(!movie){
+        movie = media;
+        //console.log("in else if: " + song);
     }
     //console.log("line 88: " + movie);
     var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
 
-    console.log(queryUrl);
+    //console.log(queryUrl);
 
     request(queryUrl, function(error, response, body) {
 
@@ -97,7 +110,7 @@ function movieThisFx() {
 
         // Parse the body of the site and recover just the imdbRating
         var jsonOmdb = JSON.parse(body);
-        console.log(jsonOmdb);
+        //console.log(jsonOmdb);
         console.log("Title: " + jsonOmdb.Title);
         console.log("Release Year: " + jsonOmdb.Year);
         console.log("IMDB Rating: " + jsonOmdb.imdbRating);
@@ -113,5 +126,53 @@ function movieThisFx() {
 };
 
 function doWhatItSaysFx() {
+    fs.readFile("random.txt", "utf8", function(error, data) {
+
+        // If the code experiences any errors it will log the error to the console.
+        if (error) {
+          return console.log(error);
+        }
+      
+        // We will then print the contents of data
+        console.log("What's in this file: " + data);
+        //write it on the console
+        //console.log(data.split(","));
+        
+        //split the string
+        textFileInput = data.split(",");
+        //console.log("textfile: " + textFileInput);
+        //process.stdout.clearLine();
+        //process.stdout.cursorTo(0);
+        //process.stdout.write("node " + textFileInput);
+        //console.log(textFileInput[0]);
+        //console.log(textFileInput[1]);
+        newCase = textFileInput[0].toString();
+        media = textFileInput[1].toString();
+        //console.log(media);
+
+        if(!textFileInput[1]) {
+            console.log("I need more information")
+        }
+        else {
+
+        switch(newCase) {
+            case "my-tweets":
+                myTweetsFx();
+                break;
+        
+            case "spotify-this-song":
+                spotifyThisSongFx(media);
+                break;
+        
+            case "movie-this":
+                movieThisFx(media);
+                break;
+        }
+    }
+        
+      
+      });
+
+
     
 }
