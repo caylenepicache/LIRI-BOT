@@ -38,23 +38,21 @@ switch(action) {
 }
 
 function myTweetsFx() {
-    var params = { screen_name: "LIRI_Bootcamp", count: 10 };
+    var params = { screen_name: "liri_bootcamp", count: 20 };
     client.get('statuses/user_timeline', params, function(error, tweets, response) {
-        if (!error && response.StatusCode == 200) {
-            console.log(data);
+        if (!error) {
 
-            console.log("=============================================");
-            console.log("Here are the most recent tweets");
+            console.log("Most recent tweets from liri_bootcamp");
 
             for (var i = 0; i < tweets.length; i++) {
 
-                console.log("_____________________________________________");
-                console.log("Tweeted on: " + tweets[i].created_at);
+                console.log("--------------------------------------------");
+                console.log("Created on: " + tweets[i].created_at);
                 console.log(tweets[i].text);
 
             }
         }
-    });
+    })
 };
 
 function spotifyThisSongFx() {
