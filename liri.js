@@ -19,6 +19,7 @@ var userInput = process.argv.slice(3).join('+');
 //console.log(action);
 //console.log(userInput);
 
+//switch function is put into action with a user action input
 switch(action) {
     case "my-tweets":
         myTweetsFx();
@@ -109,13 +110,21 @@ function movieThisFx() {
         // Parse the body of the site and recover just the imdbRating
         var jsonOmdb = JSON.parse(body);
         //console.log(jsonOmdb);
+        //Title
         console.log("Title: " + jsonOmdb.Title);
+        //Release Year
         console.log("Release Year: " + jsonOmdb.Year);
+        //IMDB Rating
         console.log("IMDB Rating: " + jsonOmdb.imdbRating);
+        //Rotten Tomatoes rating
         console.log("Rotten Tomatoes Rating: " + jsonOmdb.Ratings[1].Value);
+        //Country
         console.log("Country: " + jsonOmdb.Country);
+        //Language
         console.log("Language: " + jsonOmdb.Language);
+        //Plot
         console.log("Plot: " + jsonOmdb.Plot);
+        //Actors
         console.log("Actors: " + jsonOmdb.Actors);
 
     }
@@ -139,20 +148,18 @@ function doWhatItSaysFx() {
         //split the string
         textFileInput = data.split(",");
         //console.log("textfile: " + textFileInput);
-        //process.stdout.clearLine();
-        //process.stdout.cursorTo(0);
-        //process.stdout.write("node " + textFileInput);
-        //console.log(textFileInput[0]);
-        //console.log(textFileInput[1]);
+
+        //set array values into strings
         newCase = textFileInput[0].toString();
         media = textFileInput[1].toString();
         //console.log(media);
 
+        //makes sure there is enough information in the file
         if(!textFileInput[1]) {
             console.log("I need more information")
         }
         else {
-
+        //if theres enough information, it calls a similar switch case with new case/media values
         switch(newCase) {
             case "my-tweets":
                 myTweetsFx();
