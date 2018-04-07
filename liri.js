@@ -16,8 +16,8 @@ var media = "";
 
 var action = process.argv[2];
 var userInput = process.argv.slice(3).join('+');
-console.log(action);
-console.log(userInput);
+//console.log(action);
+//console.log(userInput);
 
 switch(action) {
     case "my-tweets":
